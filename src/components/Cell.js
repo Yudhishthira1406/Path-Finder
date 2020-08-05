@@ -9,23 +9,24 @@ function Cell(props) {
     const [start, setstart, end, setend] = useContext(endparam)
     const [Wall, setWall] = useContext(wallcontext)
     const [walldown, setwalldown] = useContext(walldowncotext)
-    const [col, setcol] = useState("white")
     
    
     
-    useEffect(() => {
-        
-        if(start.r === props.row && start.c === props.col) setcol("blue")
-        else if(end.r === props.row && end.c === props.col) setcol("red")
-        else if(!Wall[props.row][props.col]) setcol("white")
-    }, [start, end])
+    var id = `${props.row}-${props.col}`
+
+    
 
     const clickHandler = () => {
+
+        
         if(action.start) {
+            if(start.r !== -1){document.getElementById(`${start.r}-${start.c}`).style.backgroundColor = "whitesmoke"}
             setstart(
                 {r : props.row,
-                c : props.col}
+                c : props.col},
+                
             ) 
+            document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "blue"
             if(Wall[props.row][props.col]) {
                 setWall((prevState) => {
                     let state = prevState
@@ -37,12 +38,14 @@ function Cell(props) {
             
         }
         if(action.end) {
+            if(end.r !== -1) document.getElementById(`${end.r}-${end.col}`).style.backgroundColor = "whitesmoke"
             setend(
                 {
                     r : props.row,
                     c : props.col
                 }
             )
+            document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "red"
             if(Wall[props.row][props.col]) {
                 setWall((prevState) => {
                     let state = prevState
@@ -58,17 +61,18 @@ function Cell(props) {
                 let state = prevState
                 if(state[props.row][props.col]) {
                     state[props.row][props.col] = 0
-                    setcol("white")
+                    document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "whitesmoke"
                 }
                 else {
-                    state[props.row][props.col] = 0
-                    setcol("black")
+                    state[props.row][props.col] = 1
+                    document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "black"
                 }
                 return state
             })}
         }
         console.log("Clicked", props.row, props.col)
     }
+    
 
     const overhandler = () => {
         if(!((start.r === props.row && start.c === props.col) || (end.r === props.row && end.c === props.col)) ){
@@ -78,13 +82,14 @@ function Cell(props) {
                     state[props.row][props.col] = 1
                     return state
                 })
-                setcol("black") 
+                document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "black" 
             }
         }
     }
     
     return (
         <div className = "cell" 
+        id = {id}
         onClick = {clickHandler} 
         onMouseDown = {() => {
             if(action.wall) {
@@ -93,7 +98,7 @@ function Cell(props) {
         }}
         onMouseOver = {overhandler}
         onMouseUp = {() => setwalldown(false)}
-        style = {{backgroundColor : col}} >
+         >
             
         </div>
     )

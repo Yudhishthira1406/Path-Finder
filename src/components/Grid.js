@@ -14,13 +14,13 @@ function Grid() {
         let mat = []
         for(let i = 0; i <= 20; ++i) {
             let row = []
-            for(let j = 0; j <= 30; ++j) {
+            for(let j = 0; j <= 50; ++j) {
                 row.push({r : i, c : j})
             }
             mat.push(row)
         }
         setmatrix(mat)
-        console.log(mat)
+       
     }, [])
 
     
