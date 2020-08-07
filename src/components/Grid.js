@@ -3,13 +3,16 @@ import './css/Grid.css'
 import Cell from './Cell'
 
 
+
 export const walldowncotext = React.createContext()
+export const weightdowncontext = React.createContext()
 
 function Grid() {
     
     const [matrix, setmatrix] = useState([])
     
     const [walldown, setwalldown] = useState(false)
+    const [weightdown, setweightdown] = useState(false)
     useEffect(() => {
         let mat = []
         for(let i = 0; i <= 20; ++i) {
@@ -26,6 +29,7 @@ function Grid() {
     
     return (
         <div className = "grid-container">
+            <weightdowncontext.Provider value = {[weightdown, setweightdown]}>
             <walldowncotext.Provider value = {[walldown, setwalldown]}>
             <table>
             {matrix.map(
@@ -41,6 +45,7 @@ function Grid() {
             )}
         </table>
             </walldowncotext.Provider>
+            </weightdowncontext.Provider>
         
         </div>
     )

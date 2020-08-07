@@ -44,3 +44,6 @@ button {
   background-color: red;
 }
 
+#walls {
+  display: none;
+}

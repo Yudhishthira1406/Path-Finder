@@ -1,7 +1,7 @@
 import React, { useEffect, useContext , useState} from 'react'
 
-import {texts, endparam, wallcontext} from '../App'
-import { walldowncotext } from './Grid'
+import {texts, endparam, wallcontext, weightcontext} from '../App'
+import { walldowncotext, weightdowncontext } from './Grid'
 
 function Cell(props) {
 
@@ -9,7 +9,8 @@ function Cell(props) {
     const [start, setstart, end, setend] = useContext(endparam)
     const [Wall, setWall] = useContext(wallcontext)
     const [walldown, setwalldown] = useContext(walldowncotext)
-    
+    const [weightdown, setweightdown] = useContext(weightdowncontext)
+    const [weight, setweight] = useContext(weightcontext)
    
     
     var id = `${props.row}-${props.col}`
@@ -34,6 +35,15 @@ function Cell(props) {
                     return state
                 })
             }
+
+            if(weight[props.row][props.col] === 5) {
+                setweight((prevState) => {
+                    let state = prevState
+                    state[props.row][props.col] = 1
+                    return state
+                })
+                document.getElementById(`${props.row}-${props.col}`).innerHTML = "" 
+            }
             
             
         }
@@ -53,9 +63,17 @@ function Cell(props) {
                     return state
                 })
             }
+            if(weight[props.row][props.col] === 5) {
+                setweight((prevState) => {
+                    let state = prevState
+                    state[props.row][props.col] = 1
+                    return state
+                })
+                document.getElementById(`${props.row}-${props.col}`).innerHTML = "" 
+            }
         }
         if(action.wall) {
-            if(!((start.r === props.row && start.c === props.col) || (end.r === props.row && end.c === props.col)) ) 
+            if(!((start.r === props.row && start.c === props.col) || (end.r === props.row && end.c === props.col) || weight[props.row][props.col] === 2) ) 
 
             {setWall((prevState) => {
                 let state = prevState
@@ -66,6 +84,22 @@ function Cell(props) {
                 else {
                     state[props.row][props.col] = 1
                     document.getElementById(`${props.row}-${props.col}`).style.backgroundColor = "black"
+                }
+                return state
+            })}
+        }
+        if(action.weight) {
+            if(!((start.r === props.row && start.c === props.col) || (end.r === props.row && end.c === props.col) || Wall[props.row][props.col] === 1) ) 
+
+            {setweight((prevState) => {
+                let state = prevState
+                if(state[props.row][props.col] === 1) {
+                    state[props.row][props.col] = 5
+                    document.getElementById(`${props.row}-${props.col}`).innerHTML = "<b>x5</b>"
+                }
+                else {
+                    state[props.row][props.col] = 1
+                    document.getElementById(`${props.row}-${props.col}`).innerHTML = ""
                 }
                 return state
             })}
